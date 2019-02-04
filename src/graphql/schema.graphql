@@ -1,0 +1,56 @@
+input CreateUserInput {
+  email: String!
+  password: String!
+  name: String!
+}
+
+input UpdateUserInput {
+  email: String
+  password: String
+  name: String
+}
+
+input CreateTodoInput {
+  title: String!
+  body: String!
+  userId: ID!
+}
+
+input UpdateTodoInput {
+  title: String
+  body: String
+}
+
+type Todo {
+  id: ID!
+  title: String!
+  body: String!
+  owner: User!
+}
+
+type User {
+  id: ID!
+  email: String!
+  name: String!
+  todos: [Todo!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(userId: ID!, updateUserInput: UpdateUserInput!): User!
+  deleteUser(userId: ID!): User!
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+  updateTodo(todoId: ID!, updateTodoInput: UpdateTodoInput!): Todo!
+  deleteTodo(todoId: ID!): Todo!
+}
+
+type Query {
+  users: [User!]!
+  user(userId: ID!): User!
+  todos: [Todo!]!
+  todo(todoId: ID!): Todo!
+}
+
+type Subscription {
+  newUser: User!
+}

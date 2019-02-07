@@ -7,11 +7,10 @@ const server = new GraphQLServer({
   typeDefs: `${__dirname}/graphql/schema.graphql`,
   resolvers,
   context: {
-    PubSub
+    pubSub: new PubSub()
   }
 });
 
-console.log(process.env.MONGO_URI);
 connect(process.env.MONGO_URI)
   .then(() => {
     server.start({ port: 3000 }, ({ port }) => {

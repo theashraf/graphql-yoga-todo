@@ -1,9 +1,10 @@
 import User from "../../models/User";
 import Todo from "../../models/Todo";
 
-const createUser = async (_, args) => {
+const createUser = async (_, args, { pubSub }) => {
   const newUser = new User({ ...args.createUserInput });
   await newUser.save();
+  pubSub.publish("userCreated", { userCreated: newUser });
   return newUser;
 };
 const updateUser = async (_, args) => {
@@ -14,7 +15,7 @@ const updateUser = async (_, args) => {
   );
   return updatedUser;
 };
-const deleteUser = async (_, args) => {
+const deleteUser = async (_, args, { pubSub }) => {
   const deletedUser = await User.findByIdAndRemove(args.userId);
   await Todo.remove({ owner: args.userId });
   return deletedUser;

@@ -1,13 +1,14 @@
 import Todo from "../../models/Todo";
 import User from "../../models/User";
 
-const createTodo = async (_, args) => {
+const createTodo = async (_, args, { pubSub }) => {
   const newTodo = new Todo(args.createTodoInput);
   const owner = await User.findById(args.createTodoInput.userId);
   newTodo.owner = owner;
   await newTodo.save();
   owner.todos.push(newTodo);
   await owner.save();
+  pubSub.publish(`todoCreated ${owner.id}`, { todoCreated: newTodo });
   return newTodo;
 };
 
